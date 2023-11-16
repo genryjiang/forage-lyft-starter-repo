@@ -1,11 +1,15 @@
-from battery import Battery
+from battery.battery import Battery
+from utils import add_years_to_date
+
 
 class NubbinBattery(Battery):
-    SERVICE_LIFE_DAYS = 4 * 365  # 4 years expressed in days
-
-    def __init__(self, last_service_date: int, current_date: int):
-        self.last_service_date = last_service_date
+    def __init__(self, current_date, last_service_date):
         self.current_date = current_date
+        self.last_service_date = last_service_date
 
-    def needs_service(self) -> bool:
-        return self.current_date - self.last_service_date > NubbinBattery.SERVICE_LIFE_DAYS
+    def needs_service(self):
+        date_which_battery_should_be_serviced_by = add_years_to_date(self.last_service_date, 4)
+        if date_which_battery_should_be_serviced_by < self.current_date:
+            return True
+        else:
+            return False
